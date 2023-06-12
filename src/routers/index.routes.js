@@ -1,14 +1,11 @@
+const {Router} = require('express')
+const router = Router()
 
-// const {Router} = require('express')
+const {renderIndex,renderAbout} = require('../controllers/index.controllers.js')
 
-// const router = Router()
 
-// router.get('/',(req,res)=>{
-//     res.render('index')
-// })
+router.get('/',renderIndex)
+router.get('/login',renderAbout)
 
-// router.get('/login',(req,res)=>{
-//     res.render('login')
-// })
 
-// module.exports = router
+module.exports = router

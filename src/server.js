@@ -1,6 +1,7 @@
 const express = require('express')
 const path = require('path');
 const {engine} = require('express-handlebars')
+const methodOverride = require('method-override');
 
 // Inicializaciones
 const app = express()
@@ -18,18 +19,14 @@ app.set('view engine','.hbs') // El motor de plantilla maneje la extension hbs
 
 // Middlewares
 app.use(express.urlencoded({extended:false}))
+app.use(methodOverride('_method'))
 
 // Variables globales
 
 
 // Rutas
-app.get('/', (req,res) => {
-    res.render('index')
-})
-
-app.get('/login', (req,res) => {
-    res.render('login')
-})
+app.use(require('./routers/index.routes'))
+app.use(require('./routers/portafolio.routes'))
 
 // Archivos estaticos
 app.use(express.static(path.join(__dirname,'public')))
