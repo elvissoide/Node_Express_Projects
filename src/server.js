@@ -2,7 +2,7 @@ const express = require('express')
 const path = require('path');
 const {engine} = require('express-handlebars')
 const methodOverride = require('method-override');
-
+const fileUpload = require('express-fileupload')
 const passport = require('passport');
 const session = require('express-session');
 
@@ -20,6 +20,10 @@ app.engine('.hbs', engine({
     extname:'.hbs' // Extension del motor de plantilla
 }))
 app.set('view engine','.hbs') // El motor de plantilla maneje la extension hbs
+app.use(fileUpload({
+    useTempFiles : true,
+    tempFileDir : './uploads'
+}));
 
 // Middlewares
 app.use(express.urlencoded({extended:false}))
@@ -31,13 +35,12 @@ app.use(session({
 }));
 app.use(passport.initialize())
 app.use(passport.session())
+
+// Variables globales
 app.use((req,res,next)=>{
     res.locals.user = req.user?.name || null
     next()
 })
-
-// Variables globales
-
 
 // Rutas
 app.use(require('./routers/index.routes'))

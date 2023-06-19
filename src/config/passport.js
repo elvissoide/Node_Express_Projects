@@ -22,12 +22,9 @@ passport.use(new LocalStrategy({
     return done(null,userBDD)
 }))
 
-
-
 passport.serializeUser((user,done)=>{
     done(null,user.id)
 })
-
 
 passport.deserializeUser(async (id, done) => {
     const userDB  = await User.findById(id).exec();
