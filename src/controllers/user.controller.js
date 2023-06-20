@@ -23,6 +23,8 @@ const registerNewUser = async(req,res)=>{
     const newUser = await new User({name,email,password,confirmpassword})
     // ENCRIPTAR EL PASSWORD
     newUser.password = await newUser.encrypPassword(password)
+    const token = newUser.crearToken()
+    sendMailToUser(email,token)
     newUser.save()
     res.redirect('/user/login')
 }
@@ -48,10 +50,26 @@ const logoutUser =(req,res)=>{
         res.redirect('/');
     });
 }
+
+const confirmEmail = async(req,res)=>{
+    if(!(req.params.token)) return res.send("Lo sentimos, no se puede validar la cuenta")
+    // Cargar el usuario en base al token enviado
+    const userBDD = await User.findOne({token:req.params.token})
+    // Setear el token a null
+    userBDD.token = null
+    // Cambiar el confirmEmail a true
+    userBDD.confirmEmail=true
+    // Guardar en bdd
+    await userBDD.save()
+    // Mensaje de respuesta
+    res.send('Token confirmado, ya puedes iniciar sesión');
+}
+
 module.exports={
     renderRegisterForm,
     registerNewUser,
     renderLoginForm,
     loginUser,
-    logoutUser
+    logoutUser,
+    confirmEmail
 }

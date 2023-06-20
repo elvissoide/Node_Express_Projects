@@ -14,12 +14,25 @@ const userSchema = new Schema(
         password:{
             type:String,
             require:true
+        },
+        token:{
+            type:String,
+            default:null
+        },
+        confirmEmail:{
+            type:Boolean,
+            default:false
         }
     },
     {
         timestamps:true
     }
 )
+
+// Método para crear un token 
+userSchema.methods.crearToken = function(){
+    return token = this.token = Math.random().toString(36).slice(2)
+}
 
 // Metodo para poder cifrar la contra
 userSchema.methods.encrypPassword = async(password) => {
